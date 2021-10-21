@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun instantiateItem(myContainer: ViewGroup, mPosition: Int): Any? {
             layoutInflater =
-                getSystemService<Any>(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                getSystemService<Any>(context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val v = layoutInflater!!.inflate(layouts[mPosition], myContainer, false)
             myContainer.addView(v)
             return v
