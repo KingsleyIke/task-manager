@@ -22,6 +22,8 @@ import android.view.WindowManager
 import android.text.Html
 
 import android.R
+import android.content.Context
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
 
@@ -146,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun instantiateItem(myContainer: ViewGroup, mPosition: Int): Any? {
             layoutInflater =
-                getSystemService<Any>(context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                getSystemService<Any>(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val v = layoutInflater!!.inflate(layouts[mPosition], myContainer, false)
             myContainer.addView(v)
             return v
