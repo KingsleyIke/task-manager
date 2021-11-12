@@ -7,24 +7,24 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-
 import android.widget.TextView
-
 import androidx.viewpager.widget.ViewPager
 import android.view.ViewGroup
-
 import android.view.LayoutInflater
-
 import androidx.viewpager.widget.PagerAdapter
-
 import android.view.WindowManager
-
 import android.text.Html
-
-import android.R
 import android.content.Context
+import android.graphics.Color
+import android.view.Window
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import android.R.array
+
+
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewPager: ViewPager
     lateinit var intromanager: IntroManager
     lateinit var viewPagerAdapter: ViewPagerAdapter
-    lateinit var dots: Array<TextView>
+    lateinit var dots: Array<TextView?>
     lateinit var next: Button
     lateinit var skip:Button
     lateinit var dotsLayout: LinearLayout
@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         intromanager = IntroManager(this)
 
         if (!intromanager.Check()) {
+            //TODO fix intro mager handling first time opening of app
             intromanager.setFirst(false)
             val i = Intent(this@MainActivity, HomeActivity::class.java)
             startActivity(i)
@@ -67,21 +68,23 @@ class MainActivity : AppCompatActivity() {
         addBottomDots(0)
         changeStatusBarColor()
         viewPagerAdapter = ViewPagerAdapter()
-        viewPager.setAdapter(viewPagerAdapter)
+        viewPager.adapter = viewPagerAdapter
         viewPager.addOnPageChangeListener(viewListener)
 
         //For the next and previous buttons
 
         //For the next and previous buttons
         skip.setOnClickListener { view: View? ->
+//            intromanager.setFirst(true)
             val i = Intent(this@MainActivity, HomeActivity::class.java)
             startActivity(i)
             finish()
         }
 
         next.setOnClickListener { view: View? ->
+//            intromanager.setFirst(true)
             val current = getItem(+1)
-            if (current < layouts.length) {
+            if (current < layouts.size) {
                 viewPager.currentItem = current
             } else {
                 val i = Intent(this@MainActivity, HomeActivity::class.java)
@@ -94,18 +97,20 @@ class MainActivity : AppCompatActivity() {
 
     //Giving the dots functionality
     private fun addBottomDots(position: Int) {
-        dots = arrayOfNulls(layouts.length)
+        dots = arrayOfNulls(layouts.size)
+
         val colorActive = resources.getIntArray(R.array.dot_active)
         val colorInactive = resources.getIntArray(R.array.dot_inactive)
+
         dotsLayout.removeAllViews()
-        for (i in 0 until dots.length) {
+        for (i in dots.indices) {
             dots[i] = TextView(this)
-            dots[i].text = Html.fromHtml("&#8226;")
-            dots[i].setTextSize(35)
-            dots[i].setTextColor(colorInactive[position])
+            dots[i]?.text = Html.fromHtml("&#8226;")
+            dots[i]?.setTextSize(35F)
+            dots[i]?.setTextColor(colorInactive[position])
             dotsLayout.addView(dots[i])
         }
-        if (dots.length > 0) dots[position].setTextColor(colorActive[position])
+        if (dots.isNotEmpty()) dots[position]?.setTextColor(colorActive[position])
     }
 
     private fun getItem(i: Int): Int {
@@ -117,12 +122,11 @@ class MainActivity : AppCompatActivity() {
             position: Int,
             positionOffset: Float,
             positionOffsetPixels: Int
-        ) {
-        }
+        ) {}
 
         override fun onPageSelected(position: Int) {
             addBottomDots(position)
-            if (position == layouts.length - 1) {
+            if (position == layouts.size - 1) {
                 next.text = "PROCEED"
                 skip.visibility = View.GONE
             } else {
@@ -143,28 +147,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     //PagerAdapter class which will inflate our sliders in our ViewPager
-    class ViewPagerAdapter : PagerAdapter() {
+    inner class ViewPagerAdapter : PagerAdapter() {
         var layoutInflater: LayoutInflater? = null
 
-        override fun instantiateItem(myContainer: ViewGroup, mPosition: Int): Any? {
+        override fun instantiateItem(myContainer: ViewGroup, mPosition: Int): Any {
             layoutInflater =
-                getSystemService<Any>(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val v = layoutInflater!!.inflate(layouts[mPosition], myContainer, false)
             myContainer.addView(v)
             return v
         }
 
         override fun getCount(): Int {
-            return layouts.length
+            return layouts.size
         }
 
         override fun isViewFromObject(mView: View, mObject: Any): Boolean {
             return mView === mObject
         }
 
-        override fun destroyItem(mContainer: ViewGroup, mPosition: Int, mObject: Any?) {
-            val v = mObject as View?
-            mContainer.removeView(v)
+        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+//            super.destroyItem(container, position, `object`)
+            val v = `object` as View?
+            container.removeView(v)
         }
+
+//        override fun destroyItem(mContainer: ViewGroup, mPosition: Int, mObject: Any?) {
+//            val v = mObject as View?
+//            mContainer.removeView(v)
+//        }
     }
 }

@@ -21,6 +21,6 @@ class IntroManager(context: Context) {
     init {
         this.context = context
         pref = context.getSharedPreferences("first", 0)
-        editor = pref.edit()
+        pref.edit().also { editor = it }
     }
 }

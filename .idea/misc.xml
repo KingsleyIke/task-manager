@@ -6,7 +6,10 @@
         <entry key="app/src/main/res/drawable/splash_image.xml" value="0.265625" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24947916666666667" />
+        <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.23541666666666666" />
         <entry key="app/src/main/res/layout/slider_1.xml" value="0.24947916666666667" />
+        <entry key="app/src/main/res/layout/slider_2.xml" value="0.24947916666666667" />
+        <entry key="app/src/main/res/layout/slider_3.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/layout/splash_image.xml" value="0.24947916666666667" />
       </map>
     </option>
