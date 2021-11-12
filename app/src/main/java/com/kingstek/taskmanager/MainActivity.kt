@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         intromanager = IntroManager(this)
 
         if (!intromanager.Check()) {
+            //TODO fix intro mager handling first time opening of app
             intromanager.setFirst(false)
             val i = Intent(this@MainActivity, HomeActivity::class.java)
             startActivity(i)
@@ -74,12 +75,14 @@ class MainActivity : AppCompatActivity() {
 
         //For the next and previous buttons
         skip.setOnClickListener { view: View? ->
+//            intromanager.setFirst(true)
             val i = Intent(this@MainActivity, HomeActivity::class.java)
             startActivity(i)
             finish()
         }
 
         next.setOnClickListener { view: View? ->
+//            intromanager.setFirst(true)
             val current = getItem(+1)
             if (current < layouts.size) {
                 viewPager.currentItem = current
